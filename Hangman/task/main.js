@@ -1,24 +1,64 @@
 const input = require('sync-input');
 
+let attempts = 8;
+const wordArray = ['python', 'java', 'swift', 'javascript'];
+const loadWord = (words) => words[Math.floor(Math.random() * words.length)];
+
+const mapLettersInWord = (word) => {
+
+    let charsInWord = new Map();
+
+    for (let i = 0; i < word.length; i++) {
+        let ch = word.charAt(i);
+        if (charsInWord.has(ch)) {
+            charsInWord.get(ch).push(i);
+        } else {
+            charsInWord.set(ch, [i]);
+        }
+    }
+
+    return charsInWord;
+}
+
+let answer = loadWord(wordArray);
+let guesses = answer.split('').fill('-', 0, answer.length);
+let answerMap = mapLettersInWord(answer);
+let misses = [];
+
 console.log('H A N G M A N');
-console.log('Guess the word: ');
+while (attempts !== 0) {
 
-const words = ['python', 'java', 'swift', 'javascript'];
-const index = Math.floor(Math.random() * words.length);
+    console.log();
+    console.log(guesses.join(''));
 
-if (words[index] === 'python') {
-    console.log('Guess the word pyt---:');
-} else if (words[index] === 'java') {
-    console.log('Guess the word jav-:');
-} else if (words[index] === 'swift') {
-    console.log('Guess the word swi--:');
-} else {
-    console.log('Guess the word jav-------:');
+    let guess = input(`Input a letter: `);
+    attempts--;
+
+    if (attempts === 0) {
+        console.log();
+        break;
+    }
+
+    if (guesses.includes(guess) || misses.includes(guess)) {
+        console.log(`You've already guessed this letter.`);
+        continue;
+    }
+
+    if (!answerMap.has(guess)) {
+        console.log(`That letter doesn't appear in the word.`);
+        misses.push(guess);
+        continue;
+    }
+
+    if (attempts === 0) {
+        console.log();
+        break;
+    }
+
+    for (let i of answerMap.get(guess)) {
+        guesses[i] = guess;
+    }
+
 }
 
-const userWord = input();
-if (words[index] === userWord) {
-    console.log('You survived!');
-} else {
-    console.log('You lost!');
-}
+console.log('Thanks for playing!');
