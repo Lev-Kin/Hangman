@@ -33,14 +33,23 @@ while (attempts > 0 && guesses.includes('-')) {
 
     let guess = input(`Input a letter: `);
 
+    if (!guess || guess.length > 1) {
+        console.log('Please, input a single letter.');
+        continue;
+    }
+
+    if (guess < 'a' || guess > 'z') {
+        console.log('Please, enter a lowercase letter from the English alphabet.');
+        continue;
+    }
+
     if (attempts === 0) {
         console.log();
         break;
     }
 
-    if (guesses.includes(guess)) {
-        attempts--;
-        console.log(`No improvements.`);
+    if (guesses.includes(guess) || misses.includes(guess)) {
+        console.log(`You've already guessed this letter.`);
         continue;
     }
 
@@ -64,4 +73,4 @@ while (attempts > 0 && guesses.includes('-')) {
 
 console.log(guesses.includes('-')
     ? 'You lost!'
-    : 'You guessed the word!\nYou survived!');
+    : `You guessed the word ${answer}!\nYou survived!`);
