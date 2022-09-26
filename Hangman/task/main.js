@@ -26,25 +26,26 @@ let answerMap = mapLettersInWord(answer);
 let misses = [];
 
 console.log('H A N G M A N');
-while (attempts !== 0) {
+while (attempts > 0 && guesses.includes('-')) {
 
     console.log();
     console.log(guesses.join(''));
 
     let guess = input(`Input a letter: `);
-    attempts--;
 
     if (attempts === 0) {
         console.log();
         break;
     }
 
-    if (guesses.includes(guess) || misses.includes(guess)) {
-        console.log(`You've already guessed this letter.`);
+    if (guesses.includes(guess)) {
+        attempts--;
+        console.log(`No improvements.`);
         continue;
     }
 
     if (!answerMap.has(guess)) {
+        attempts--;
         console.log(`That letter doesn't appear in the word.`);
         misses.push(guess);
         continue;
@@ -61,4 +62,6 @@ while (attempts !== 0) {
 
 }
 
-console.log('Thanks for playing!');
+console.log(guesses.includes('-')
+    ? 'You lost!'
+    : 'You guessed the word!\nYou survived!');
